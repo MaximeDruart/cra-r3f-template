@@ -18,7 +18,7 @@ const CanvasContainer = () => {
 				<ambientLight intensity={1} />
 				<Scene />
 				<OrbitControls />
-				<gridHelper />
+				{/* <gridHelper /> */}
 				<axesHelper scale={[5, 5, 5]} />
 			</Canvas>
 		</StyledContainer>
