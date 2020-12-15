@@ -14,7 +14,7 @@ const StyledContainer = styled.div`
 const CanvasContainer = () => {
 	return (
 		<StyledContainer>
-			<Canvas style={{ background: params.sceneColor }}>
+			<Canvas colorManagement={true} style={{ background: params.sceneColor }}>
 				<ambientLight intensity={1} />
 				<Scene />
 				<OrbitControls />
