@@ -15,10 +15,10 @@ const StyledContainer = styled.div`
 const CanvasContainer = () => {
   return (
     <StyledContainer>
-      <Canvas style={{ background: params.sceneColor }}>
+      <Canvas shadowMap={true} style={{ background: params.sceneColor }}>
         <ambientLight intensity={1} />
         <OrbitControls />
-        <gridHelper />
+        {/* <gridHelper /> */}
         <axesHelper scale={[5, 5, 5]} />
 
         <Scene />
