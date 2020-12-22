@@ -3,6 +3,7 @@ import React, { Suspense } from 'react'
 // import { PointLightWrapper, SpotLightWrapper } from '../utils/lightWrappers'
 import params from '../assets/params.json'
 import Warehouse from './Warehouse'
+import WarehouseFloor from './WarehouseFloor'
 
 const Scene = () => {
 	return (
@@ -13,6 +14,7 @@ const Scene = () => {
 			</mesh>
 			<Suspense fallback={null}>
 				<Warehouse position={[0, 0, 0]} />
+				<WarehouseFloor />
 			</Suspense>
 		</>
 	)
