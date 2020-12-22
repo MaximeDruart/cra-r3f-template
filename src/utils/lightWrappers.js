@@ -1,26 +1,38 @@
-import React from 'react'
-import { useResource } from 'react-three-fiber'
+import React from "react"
+import { useResource } from "react-three-fiber"
 
-const PointLightWrapper = ({ position, intensity = 1, distance = 0, color = 0xffffff, helper = false }) => {
-	const pointLightRef = useResource()
+// DO NOT PUT THE HELPER INSIDE THE LIGHT AS A CHILD it bugs out idk why
 
-	return (
-		<>
-			{<pointLight position={position} intensity={intensity} distance={distance} color={color} decay={2} ref={pointLightRef} />}
-			{helper && pointLightRef.current && <pointLightHelper args={[pointLightRef.current]} />}
-		</>
-	)
+const PointLightWrapper = (props) => {
+  const pointLightRef = useResource()
+
+  return (
+    <>
+      <pointLight {...props} decay={2} ref={pointLightRef} />
+      {props.helper && pointLightRef.current && <pointLightHelper args={[pointLightRef.current]} />}
+    </>
+  )
 }
 
-const SpotLightWrapper = ({ position, intensity = 1, distance = 0, color = 0xffffff, angle = 0.5, penumbra = 0, helper = false }) => {
-	const spotLightRef = useResource()
+const SpotLightWrapper = (props) => {
+  const spotLightRef = useResource()
 
-	return (
-		<>
-			{<spotLight position={position} intensity={intensity} distance={distance} color={color} decay={2} angle={angle} penumbra={penumbra} ref={spotLightRef} />}
-			{helper && spotLightRef.current && <spotLightHelper args={[spotLightRef.current]} />}
-		</>
-	)
+  return (
+    <>
+      <spotLight {...props} ref={spotLightRef} focus={1} decay={2} />
+      {props.helper && spotLightRef.current && <spotLightHelper args={[spotLightRef.current]} />}
+    </>
+  )
+}
+const DirectionalLightWrapper = (props) => {
+  const directionalLightRef = useResource()
+
+  return (
+    <>
+      <directionalLight {...props} ref={directionalLightRef} />
+      {props.helper && directionalLightRef.current && <directionalLightHelper args={[directionalLightRef.current]} />}
+    </>
+  )
 }
 
-export { PointLightWrapper, SpotLightWrapper }
+export { PointLightWrapper, SpotLightWrapper, DirectionalLightWrapper }

@@ -1,11 +1,12 @@
 import React from "react"
 import styled from "styled-components"
 import { Canvas } from "react-three-fiber"
+import * as THREE from "three"
 import { OrbitControls, Stats } from "drei"
 
-import Scene from "./warehouseScene"
+import WarehouseScene from "./warehouseScene"
 import params from "./assets/params.json"
-import Effects from "./Effects"
+// import Effects from "./Effects"
 
 const StyledContainer = styled.div`
   width: 100vw;
@@ -15,13 +16,21 @@ const StyledContainer = styled.div`
 const CanvasContainer = () => {
   return (
     <StyledContainer>
-      <Canvas colorManagement={true} style={{ background: params.sceneColor }}>
+      <Canvas
+        onCreated={({ gl }) => {
+          gl.toneMapping = THREE.ACESFilmicToneMapping
+        }}
+        shadowMap
+        colorManagement={true}
+        style={{ background: params.sceneColor }}
+      >
         <ambientLight intensity={1} />
-        <Scene />
+        <WarehouseScene />
         <OrbitControls />
         {/* <gridHelper /> */}
         <axesHelper scale={[5, 5, 5]} />
-        <Effects />
+        {/* <Effects /> */}
+
         <Stats />
       </Canvas>
     </StyledContainer>
