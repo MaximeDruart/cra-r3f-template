@@ -17,8 +17,7 @@ const CanvasContainer = () => {
   return (
     <StyledContainer>
       <Canvas
-        camera={{ position: [-10, 3, -4] }}
-        onCreated={({ gl, camera }) => {
+        onCreated={({ gl }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping
         }}
         shadowMap
