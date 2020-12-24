@@ -10,19 +10,12 @@ const WarehouseSlice = ({ position, index }) => {
   const { nodes } = useGLTF("models/warehouseSlice.glb")
   return (
     <mesh castShadow={false} receiveShadow position={position} geometry={nodes.Cube001.geometry}>
-      <meshPhysicalMaterial
-        side={THREE.DoubleSide}
-        metalness={0}
-        roughness={1}
-        reflectivity={1}
-        color={params.sceneColor}
-        attach="material"
-      />
+      <meshLambertMaterial side={THREE.DoubleSide} color={params.sceneColor} attach="material" />
       <group>
         <EmissiveWindow position={[0, position[1] + 5.05, position[2] + 7.4]} rotation={[-Math.PI / 2.2, 0, 0]} />
         <PointLightWrapper
           position={[0, position[1] + 3.8, position[2] - 7]}
-          intensity={0.5}
+          intensity={12}
           distance={14}
           color={0xffffff}
           helper={false}
@@ -30,7 +23,7 @@ const WarehouseSlice = ({ position, index }) => {
 
         <PointLightWrapper
           position={[0, position[1] + 3.8, position[2] + 7]}
-          intensity={0.5}
+          intensity={12}
           distance={14}
           color={0xffffff}
           helper={false}
