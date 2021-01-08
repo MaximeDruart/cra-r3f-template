@@ -6,27 +6,26 @@ import { PointLightWrapper } from "../utils/lightWrappers"
 import EmissiveWindow from "./EmissiveWindow"
 import params from "../assets/params.json"
 
-const WarehouseSlice = ({ position, index }) => {
-  const { nodes } = useGLTF("models/warehouse_slice_updated.glb")
-  console.log(nodes)
+const WarehouseEnd = ({ position }) => {
+  const { nodes } = useGLTF("models/warehouse_fond.glb")
   return (
-    <mesh castShadow={false} receiveShadow position={position} geometry={nodes.slice.geometry}>
-      <meshLambertMaterial side={THREE.DoubleSide} color={params.sceneColor} attach="material" />
+    <mesh castShadow={false} receiveShadow position={position} geometry={nodes.slice001.geometry}>
+      <meshLambertMaterial color={params.sceneColor} attach="material" />
       <group>
         <EmissiveWindow position={[0, position[1] + 5.05, position[2] + 7.4]} rotation={[-Math.PI / 2.2, 0, 0]} />
         <PointLightWrapper
           position={[0, position[1] + 3.8, position[2] - 7]}
-          intensity={12}
-          distance={14}
-          color={0xffffff}
+          intensity={30}
+          distance={12.5}
+          color={0xf0f0ff}
           helper={false}
         />
 
         <PointLightWrapper
           position={[0, position[1] + 3.8, position[2] + 7]}
-          intensity={12}
-          distance={14}
-          color={0xffffff}
+          intensity={30}
+          distance={12.5}
+          color={0xf0f0ff}
           helper={false}
         />
         <EmissiveWindow
@@ -38,6 +37,6 @@ const WarehouseSlice = ({ position, index }) => {
   )
 }
 
-// useGLTF.preload('/warehouseSlice.glb')
+// useGLTF.preload('/warehouseEnd.glb')
 
-export default WarehouseSlice
+export default WarehouseEnd
