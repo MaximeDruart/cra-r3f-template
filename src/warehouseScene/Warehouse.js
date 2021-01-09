@@ -3,24 +3,24 @@ import WarehouseSlice from "./WarehouseSlice"
 import params from "../assets/params.json"
 import WarehouseFloor from "./WarehouseFloor"
 import WarehouseEnd from "./WarehouseEnd"
+import WarehouseProps from "./WarehouseProps"
 
-const Warehouse = ({ position }) => {
+const Warehouse = (props) => {
   const mappedWarehouseSlices = useMemo(
     () =>
       new Array(params.warehouseSliceNumber)
         .fill()
-        .map((_, i) => (
-          <WarehouseSlice index={i} position={[position[0] + 11.2 * i, position[1], position[2]]} key={i} />
-        )),
-    [position]
+        .map((_, i) => <WarehouseSlice index={i} position={[11.2 * i, 0, 0]} key={i} />),
+    []
   )
 
   return (
-    <>
+    <group {...props}>
       {mappedWarehouseSlices}
-      <WarehouseEnd position={[position[0] + 11.2 * params.warehouseSliceNumber, position[1], position[2]]} />
+      <WarehouseEnd position={[11.2 * params.warehouseSliceNumber, 0, 0]} />
+      <WarehouseProps position={[0, 0, 0]} />
       <WarehouseFloor />
-    </>
+    </group>
   )
 }
 
