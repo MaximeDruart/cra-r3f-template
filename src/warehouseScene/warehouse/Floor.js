@@ -1,14 +1,14 @@
 import { TextureLoader, RepeatWrapping } from "three"
 import { useFrame, useLoader, useResource } from "react-three-fiber"
 import { Reflector } from "@react-three/drei"
-import shader from "../utils/reflectorShader.js"
+import shader from "../../utils/reflectorShader.js"
 import * as THREE from "three"
 
-import params from "../assets/params.json"
+import params from "../../assets/params.json"
 // import wetFloorMapSource from "../assets/texture/wetFloorMapTest1.png"
-import wetFloorMapSource from "../assets/texture/groundwetconstrast1024.png"
-import wetFloorNormalMapSource from "../assets/texture/Ground_wet_003_normal.jpg"
-import { PointLightWrapper, SpotLightWrapper } from "../utils/lightWrappers.js"
+import wetFloorMapSource from "../../assets/texture/groundwetconstrast1024.png"
+import wetFloorNormalMapSource from "../../assets/texture/Ground_wet_003_normal.jpg"
+import { PointLightWrapper, SpotLightWrapper } from "../../utils/lightWrappers.js"
 
 const WarehouseFloor = () => {
   const wetFloorMap = useLoader(TextureLoader, wetFloorMapSource)
@@ -24,7 +24,7 @@ const WarehouseFloor = () => {
   const reflectorRef = useResource()
 
   useFrame(() => {
-    reflectorRef.current.material.uniforms.iTime = Date.now()
+    // reflectorRef.current.material.uniforms.iTime = Date.now()
   })
   return (
     <>
@@ -36,12 +36,11 @@ const WarehouseFloor = () => {
         clipBias={0.003}
         textureWidth={window.innerWidth * window.devicePixelRatio}
         textureHeight={window.innerHeight * window.devicePixelRatio}
-        color={0x151515}
-        // color={"white"}
+        color={0x5c5c5c}
       >
         <planeBufferGeometry
-          args={[params.warehouseLength * (params.warehouseSliceNumber + 1), 25]}
-          attach="geometry"
+          args={[params.warehouseLength * (params.warehouseSliceNumber + 1), 25, 5, 5]}
+          attach='geometry'
         />
       </Reflector>
       <mesh
@@ -53,18 +52,16 @@ const WarehouseFloor = () => {
       >
         <planeBufferGeometry
           args={[params.warehouseLength * (params.warehouseSliceNumber + 1), 25]}
-          attach="geometry"
+          attach='geometry'
         />
-        <meshPhongMaterial
-          shininess={0}
+        <meshLambertMaterial
           transparent
           alphaMap={wetFloorMap}
-          normalMap={wetFloorNormalMap}
-          normalScale={new THREE.Vector2(3, 3)}
-          color="black"
-          emissive={params.sceneColor}
-          emissiveIntensity={2}
-          attach="material"
+          // normalMap={wetFloorNormalMap}
+          // normalScale={new THREE.Vector2(1, 1)}
+          color='black'
+          emissive={0x151515}
+          attach='material'
         />
       </mesh>
     </>

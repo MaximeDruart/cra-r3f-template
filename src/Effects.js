@@ -8,18 +8,16 @@ const Effects = () => {
 
   return (
     <>
-      <mesh ref={sunRef} position={[0, 4, 0]} scale={[1, 1, 1]}>
-        <dodecahedronGeometry attach="geometry" />
-        <meshStandardMaterial visible={false} emissive="white" attach="material" color={"blue"} />
-        {/* <pointLight args={["white", 10, 20]} /> */}
-      </mesh>
-      <Suspense fallback="null">
-        <EffectComposer>
-          {/* <Sepia
+      {/* <mesh ref={sunRef} position={[0, 4, 0]} scale={[1, 1, 1]}>
+        <dodecahedronGeometry attach='geometry' />
+        <meshStandardMaterial visible={false} emissive='white' attach='material' color={"blue"} />
+      </mesh> */}
+      <EffectComposer>
+        {/* <Sepia
                 intensity={1.0} // sepia intensity
                 //   blendFunction={BlendFunction.NORMAL} // blend mode
             /> */}
-          {/* {sunRef.current && (
+        {/* {sunRef.current && (
             <GodRays
               test={console.log(sunRef)}
               sun={sunRef.current}
@@ -37,12 +35,11 @@ const Effects = () => {
             />
           )} */}
 
-          <Noise opacity={0.03} />
+        <Noise opacity={0.03} />
 
-          <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} opacity={0.15} />
-          {/* <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} /> */}
-        </EffectComposer>
-      </Suspense>
+        <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} opacity={0.09} />
+        {/* <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} /> */}
+      </EffectComposer>
     </>
   )
 }

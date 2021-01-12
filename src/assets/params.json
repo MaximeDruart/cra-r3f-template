@@ -1,5 +1,20 @@
 {
   "sceneColor": "#131515",
   "warehouseSliceNumber": 3,
-  "warehouseLength": 11.2
+  "warehouseLength": 11.2,
+  "totemsPerRow": 4,
+  "props": {
+    "door": {
+      "slice": 1,
+      "side": -1
+    },
+    "electric_meter": {
+      "slice": 2,
+      "side": -1
+    },
+    "shelf": {
+      "slice": 2,
+      "side": 1
+    }
+  }
 }

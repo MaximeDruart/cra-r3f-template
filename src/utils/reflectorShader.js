@@ -3,11 +3,9 @@ const shader = {
     color: {
       value: null,
     },
-
     tDiffuse: {
       value: null,
     },
-
     textureMatrix: {
       value: null,
     },
@@ -55,7 +53,7 @@ const shader = {
             // GAUSSIAN BLUR SETTINGS {{{
             float Directions = 16.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
             float Quality = 6.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
-            vec2 Radius = vec2(0.18, 0.18);
+            vec2 Radius = vec2(0.07, 0.07);
             // GAUSSIAN BLUR SETTINGS }}}
 
 
