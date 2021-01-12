@@ -36,7 +36,7 @@ const WarehouseFloor = () => {
 				clipBias={0.003}
 				textureWidth={window.innerWidth * window.devicePixelRatio}
 				textureHeight={window.innerHeight * window.devicePixelRatio}
-				color={0x202020}
+				color={'#161616'}
 				// color={'white'}
 			>
 				<planeBufferGeometry args={[params.warehouseLength * (params.warehouseSliceNumber + 1), 25]} attach="geometry" />

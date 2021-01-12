@@ -93,8 +93,10 @@ const shader = {
 
 
 			// Noise calculation
-			float noiseFactor = 0.4;
-			float noiseValue = noise(vec2(FragPos.x * noiseFactor, FragPos.z * noiseFactor)) * 0.2;
+			float noiseFactor = 0.5;
+			float noiseValue = noise(vec2(FragPos.x * noiseFactor, FragPos.z * noiseFactor));
+			float sqt = noiseValue * noiseValue;
+			noiseValue = (sqt / (2.0 * (sqt - noiseValue) + 1.0)) * 0.1;
 			vec2 noiseRad = vec2(noiseValue, noiseValue);
 			// vec3 Color = vec3(noiseValue, noiseValue, noiseValue);
 
@@ -113,9 +115,9 @@ const shader = {
 			}
 			
 			// Darkening color depending on the noise
-			vec4 black = vec4(0.0, 0.0, 0.0, 1.0);
-			float percent = noiseValue * 5.0;
-			Color = mix(Color, black, percent);
+			vec4 mixColor = vec4(19.0, 21.0, 21.0, 0.0);
+			float percent = noiseValue * 10.0;
+			Color = mix(Color, mixColor, percent);
 
             // Output to screen
             Color /= Quality * Directions - 15.0;
