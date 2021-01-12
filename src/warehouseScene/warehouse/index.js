@@ -19,7 +19,7 @@ const Warehouse = (props) => {
       {mappedWarehouseSlices}
       <End position={[11.2 * params.warehouseSliceNumber, 0, 0]} />
       <Props position={[0, -2.5, 0]} />
-      <Floor />
+      {/* <Floor /> */}
     </group>
   )
 }
