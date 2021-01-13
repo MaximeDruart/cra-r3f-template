@@ -18,17 +18,18 @@ const CanvasContainer = () => {
   return (
     <StyledContainer>
       <Canvas
-        onCreated={({ gl }) => {
+        onCreated={({ gl, camera }) => {
           gl.physicallyCorrectLights = true
           gl.toneMapping = THREE.ACESFilmicToneMapping
           gl.toneMappingExposure = Math.pow(0.7, 5.0) // -> exposure: 0.168
+          gl.antialias = false
+          camera.position.set(0, 0, 11)
         }}
         shadowMap
         colorManagement={true}
         style={{ background: params.sceneColor }}
       >
         <ambientLight intensity={1} />
-        <OrbitControls />
         {/* <gridHelper /> */}
         <axesHelper scale={[5, 5, 5]} />
         <Suspense fallback={null}>

@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, useLayoutEffect } from "react"
+import React, { useRef, useMemo, useState, useLayoutEffect, useCallback, useEffect } from "react"
 import { useFrame } from "react-three-fiber"
 import * as THREE from "three"
 import params from "../assets/params.json"
@@ -6,6 +6,7 @@ import SimplexNoise from "simplex-noise"
 import seedrandom from "seedrandom"
 import { mapRange } from "../utils/functions"
 import { PointLightWrapper } from "../utils/lightWrappers"
+import useStore from "../store"
 
 const noise = new SimplexNoise()
 
@@ -28,6 +29,13 @@ const Totem = (props) => {
   const circleRef = useRef()
 
   const lightRef = useRef()
+
+  const [setOutlineTargets, setCameraTarget, cameraTarget] = useStore(
+    useCallback((state) => [state.setOutlineTargets, state.setCameraTarget, state.cameraTarget], [])
+  )
+  useLayoutEffect(() => {
+    props.index === 0 && instancedRef.current && setOutlineTargets(instancedRef)
+  }, [instancedRef, setOutlineTargets])
 
   useLayoutEffect(() => {
     const { vertices } = circleRef.current.geometry
@@ -60,7 +68,9 @@ const Totem = (props) => {
   })
 
   const clickHandler = (e) => {
-    console.log(e)
+    const pos = new THREE.Vector3()
+    e.object.getWorldPosition(pos)
+    setCameraTarget(pos)
   }
 
   return (

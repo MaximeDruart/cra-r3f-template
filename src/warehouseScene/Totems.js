@@ -12,10 +12,11 @@ const Totems = (props) => {
         <Totem
           key={index}
           position={[
-            Math.floor(index / params.totemsPerRow) * params.warehouseLength,
-            -2.6,
             mapRange(index % params.totemsPerRow, 0, params.totemsPerRow - 1, -8, 8),
+            -2.6,
+            -Math.floor(index / params.totemsPerRow) * params.warehouseLength,
           ]}
+          index={index}
           artist={artist}
         />
       )),

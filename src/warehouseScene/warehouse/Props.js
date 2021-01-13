@@ -52,7 +52,7 @@ const WarehouseProps = (props) => {
         castShadow
         receiveShadow
         scale={[0.8, 0.8, 0.8]}
-        position={[-2.5, -1, -12.9]}
+        position={[-2.5, -1, -12.84]}
         rotation={[0, Math.PI * 2, 0]}
       />
       <Door
