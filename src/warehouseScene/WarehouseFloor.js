@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { TextureLoader, RepeatWrapping } from 'three'
 import { useFrame, useLoader, useResource } from 'react-three-fiber'
 import { Reflector } from '@react-three/drei'
@@ -5,8 +6,8 @@ import shader from '../utils/reflectorShader.js'
 import * as THREE from 'three'
 
 import params from '../assets/params.json'
-// import wetFloorMapSource from "../assets/texture/wetFloorMapTest1.png"
-import wetFloorMapSource from '../assets/texture/groundwetconstrast1024.png'
+import wetFloorMapSource from '../assets/texture/Ground_wet_003_roughness.jpg'
+// import wetFloorMapSource from '../assets/texture/groundwetconstrast1024.png'
 import wetFloorNormalMapSource from '../assets/texture/Ground_wet_003_normal.jpg'
 import { PointLightWrapper, SpotLightWrapper } from '../utils/lightWrappers.js'
 
@@ -22,6 +23,11 @@ const WarehouseFloor = () => {
 	wetFloorNormalMap.repeat.set(params.warehouseSliceNumber * 0.55, 1)
 
 	const reflectorRef = useResource()
+
+	useEffect(() => {
+		reflectorRef.current.material.uniforms.wetMap = { type: 'f', value: wetFloorMap }
+		// console.log(reflectorRef.current.material.uniforms)
+	})
 
 	useFrame(() => {
 		reflectorRef.current.material.uniforms.iTime = Date.now()

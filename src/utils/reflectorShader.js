@@ -33,6 +33,7 @@ const shader = {
 	fragmentShader: `
             uniform vec3 color;
             uniform sampler2D tDiffuse;
+			uniform sampler2D wetMap;
 			uniform float iTime;
 			uniform vec2 u_resolution;
 			varying vec4 vUv;
@@ -79,6 +80,11 @@ const shader = {
 						(d - b) * u.x * u.y;
 			}
 
+			// Parametric function
+			float parametric (in float value) {
+				return ((value * value) / (2.0 * ((value * value) - value) + 1.0)) * 0.1;
+			}
+
             void main() {
 
              // https://www.shadertoy.com/view/Xltfzj
@@ -89,16 +95,21 @@ const shader = {
             float Directions = 16.0; // BLUR DIRECTIONS (Default 16.0 - More is better but slower)
             float Quality = 6.0; // BLUR QUALITY (Default 4.0 - More is better but slower)
             vec2 Radius = vec2(0.18, 0.18);
-            // GAUSSIAN BLUR SETTINGS }}}
+			// GAUSSIAN BLUR SETTINGS }}}
 
 
 			// Noise calculation
 			float noiseFactor = 0.5;
 			float noiseValue = noise(vec2(FragPos.x * noiseFactor, FragPos.z * noiseFactor));
-			float sqt = noiseValue * noiseValue;
-			noiseValue = (sqt / (2.0 * (sqt - noiseValue) + 1.0)) * 0.1;
-			vec2 noiseRad = vec2(noiseValue, noiseValue);
+			// float sqt = noiseValue * noiseValue;
+			noiseValue = parametric(noiseValue);
+			// noiseValue = parametric(noiseValue);
+			// vec2 texRad = vec2(noiseValue, noiseValue);
 			// vec3 Color = vec3(noiseValue, noiseValue, noiseValue);
+			
+			// Tex calculation
+			vec4 wetTexColor = texture(wetMap, vec2(FragPos.x / 15.0, FragPos.z / 15.0));
+			vec2 texRad = vec2(wetTexColor.x, wetTexColor.x);
 
             // Pixel colour
 			vec4 Color = textureProj(tDiffuse, vUv);
@@ -109,20 +120,22 @@ const shader = {
             {
                 for(float i=1.0/Quality; i<=1.0; i+=1.0/Quality)
                 {
-					vec2 blurToAdd = vec2(cos(d),sin(d)) * noiseRad * i;
+					vec2 blurToAdd = vec2(cos(d),sin(d)) * texRad * i;
 					Color += textureProj( tDiffuse, vUv.xyz + vec3(blurToAdd, 0.0));
                 }
 			}
 			
 			// Darkening color depending on the noise
-			vec4 mixColor = vec4(19.0, 21.0, 21.0, 0.0);
-			float percent = noiseValue * 10.0;
+			vec4 mixColor = vec4(21.0, 21.0, 21.0, 0.0);
+			// float percent = noiseValue * 10.0;
+			float percent = wetTexColor.x * 1.0;
 			Color = mix(Color, mixColor, percent);
 
             // Output to screen
             Color /= Quality * Directions - 15.0;
 
-            gl_FragColor = vec4( blendOverlay( vec3(Color.rgb), color ), 1.0 );
+			gl_FragColor = vec4( blendOverlay( vec3(Color.rgb), color ), 1.0 );
+			// gl_FragColor = texture(wetMap, vec2(FragPos.x / 10.0, FragPos.z / 10.0));
           }
 			`,
 }
