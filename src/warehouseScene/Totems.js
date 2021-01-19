@@ -14,7 +14,7 @@ const Totems = (props) => {
           position={[
             mapRange(index % params.totemsPerRow, 0, params.totemsPerRow - 1, -8, 8),
             -2.6,
-            -Math.floor(index / params.totemsPerRow) * params.warehouseLength,
+            -Math.floor(index / params.totemsPerRow) * params.warehouseLength - 4,
           ]}
           index={index}
           artist={artist}

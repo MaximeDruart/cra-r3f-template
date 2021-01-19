@@ -31,7 +31,7 @@ const WarehouseFloor = () => {
       <Reflector
         ref={reflectorRef}
         shader={shader}
-        position={[((params.warehouseSliceNumber + 1) / 2) * 11.2 - 11.2 / 2, -4, 0]}
+        position={[0, -4.1, -(params.warehouseSliceNumber / 2) * 11.2]}
         rotation={[-Math.PI / 2, 0, 0]}
         clipBias={0.003}
         textureWidth={window.innerWidth * window.devicePixelRatio}
@@ -39,19 +39,19 @@ const WarehouseFloor = () => {
         color={0x5c5c5c}
       >
         <planeBufferGeometry
-          args={[params.warehouseLength * (params.warehouseSliceNumber + 1), 25, 5, 5]}
+          args={[26, params.warehouseLength * (params.warehouseSliceNumber + 1), 5, 5]}
           attach='geometry'
         />
       </Reflector>
-      <mesh
+      {/* <mesh
         receiveShadow
-        position={[((params.warehouseSliceNumber + 1) / 2) * 11.2 - 11.2 / 2, -3.99, 0]}
+        position={[0, -4.09, -(params.warehouseSliceNumber / 2) * 11.2]}
         // position={[0, -2, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
         scale={[1, 1, 1]}
       >
         <planeBufferGeometry
-          args={[params.warehouseLength * (params.warehouseSliceNumber + 1), 25]}
+          args={[26, params.warehouseLength * (params.warehouseSliceNumber + 1), 5, 5]}
           attach='geometry'
         />
         <meshLambertMaterial
@@ -60,10 +60,10 @@ const WarehouseFloor = () => {
           // normalMap={wetFloorNormalMap}
           // normalScale={new THREE.Vector2(1, 1)}
           color='black'
-          emissive={0x151515}
+          emissive={"0x151515"}
           attach='material'
         />
-      </mesh>
+      </mesh> */}
     </>
   )
 }

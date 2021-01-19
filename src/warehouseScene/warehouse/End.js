@@ -18,14 +18,14 @@ const WarehouseEnd = (props) => {
   return (
     <mesh {...props} castShadow={false} receiveShadow geometry={nodes.slice001.geometry}>
       <meshLambertMaterial side={THREE.DoubleSide} color={params.sceneColor} attach='material' />
-      <group name='lights'>
+      <group visible={true} name='lights'>
         <Box visible={false} ref={boxRefLeft} position={[0, -3, -3.8]} rotation={[0, 0, 0]} />
         <spotLight
           angle={1}
           castShadow
           ref={spotLightRefLeft}
           target={boxRefLeft.current}
-          power={3 * 4 * Math.PI}
+          power={1.8 * 4 * Math.PI}
           decay={2}
           position={[0, 3, -3.4]}
           color={0xffffff}
@@ -40,7 +40,7 @@ const WarehouseEnd = (props) => {
           castShadow
           ref={spotLightRefRight}
           target={boxRefRight.current}
-          power={3 * 4 * Math.PI}
+          power={1.8 * 4 * Math.PI}
           decay={2}
           position={[0, 3, 3.4]}
           color={0xffffff}

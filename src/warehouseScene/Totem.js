@@ -7,6 +7,10 @@ import seedrandom from "seedrandom"
 import { mapRange } from "../utils/functions"
 import { PointLightWrapper } from "../utils/lightWrappers"
 import useStore from "../store"
+import { Html } from "drei"
+import groundCrackPath from "../assets/texture/groundCrackInverted.png"
+import { useTexture } from "@react-three/drei"
+import lerp from "lerp"
 
 const noise = new SimplexNoise()
 
@@ -24,6 +28,11 @@ const Totem = (props) => {
       baseNumber: seedrandom(props.artist)(),
     }))
   )
+
+  const groundCrackMap = useTexture(groundCrackPath)
+  groundCrackMap.repeat.set(0.3, 0.3)
+  groundCrackMap.wrapS = THREE.RepeatWrapping
+  groundCrackMap.wrapT = THREE.RepeatWrapping
 
   const instancedRef = useRef()
   const circleRef = useRef()
@@ -65,16 +74,34 @@ const Totem = (props) => {
       instancedRef.current.setMatrixAt(index, dummyObject.matrix)
     })
     instancedRef.current.instanceMatrix.needsUpdate = true
+
+    // light update
+    lightRef.current.power = lerp(
+      lightRef.current.power,
+      cameraTarget?.id === instancedRef?.current?.uuid ? (cameraTarget ? 3 * 4 * Math.PI : 0) : 0,
+      0.1
+    )
   })
 
   const clickHandler = (e) => {
     const pos = new THREE.Vector3()
     e.object.getWorldPosition(pos)
-    setCameraTarget(pos)
+    setCameraTarget({ pos, id: e.object.uuid })
   }
 
   return (
     <group {...props}>
+      <spotLight
+        ref={lightRef}
+        // castShadow
+        visible={cameraTarget?.id === instancedRef?.current?.uuid}
+        distance={40}
+        decay={2}
+        angle={0.8}
+        target={instancedRef.current}
+        color={0xffffff}
+        position={[0, 2, 4]}
+      ></spotLight>
       <mesh visible={false} ref={circleRef}>
         <sphereGeometry attach='geometry' args={[2, 32, 32]} />
         <meshStandardMaterial wireframe={true} attach='material' color='blue' />
@@ -82,14 +109,25 @@ const Totem = (props) => {
       <instancedMesh
         onClick={clickHandler}
         scale={[0.56, 0.56, 0.56]}
-        castShadow={true}
+        castShadow={false}
         receiveShadow={true}
         ref={instancedRef}
         args={[null, null, count]}
       >
         <boxBufferGeometry attach='geometry' args={[1, 2, 1]}></boxBufferGeometry>
-        <meshLambertMaterial side={THREE.DoubleSide} color={params.sceneColor} attach='material' />
+        <meshLambertMaterial
+          side={THREE.DoubleSide}
+          color={params.sceneColor}
+          emissive={"rgb(40,40,40)"}
+          attach='material'
+        />
+        {/* <meshStandardMaterial color={params.sceneColor} attach='material' /> */}
+        {/* <Html scaleFactor={10}>Text</Html> */}
       </instancedMesh>
+      {/* <mesh position-y={-1.51} rotation={[-Math.PI / 2, 0, 0]}>
+        <torusBufferGeometry args={[2.2, 0.0, 16, 100]} />
+        <meshLambertMaterial color='black' emissive='rgba(200,200,200)' />
+      </mesh> */}
     </group>
   )
 }

@@ -1,5 +1,5 @@
 import React from "react"
-import params from "../../assets/params.json"
+import params from "../assets/params.json"
 import { useGLTF } from "@react-three/drei/useGLTF"
 
 export const Shelf = (props) => {

@@ -38,7 +38,7 @@ const Effects = () => {
             />
           )} */}
 
-        {outlineTargets && (
+        {/* {outlineTargets && (
           <Outline
             selection={[outlineTargets]} // selection of objects that wiill be outlined
             blendFunction={BlendFunction.SCREEN} // set this to BlendFunction.ALPHA for dark outlines
@@ -53,12 +53,12 @@ const Effects = () => {
             blur={false} // whether the outline should be blurred
             xRay={true} // indicates whether X-Ray outlines are enabled
           />
-        )}
+        )} */}
 
-        <Noise opacity={0.02} />
         <SMAA />
+        {/* <Noise opacity={0.02} /> */}
         <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} opacity={0.09} />
-        {/* <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} /> */}
+        <DepthOfField focusDistance={0} focalLength={0.04} bokehScale={1.6} height={360} />
       </EffectComposer>
     </>
   )
