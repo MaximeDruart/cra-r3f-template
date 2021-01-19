@@ -2,7 +2,6 @@ import React from "react"
 import * as THREE from "three"
 import { useGLTF } from "@react-three/drei/useGLTF"
 
-import { PointLightWrapper } from "../../utils/lightWrappers"
 import EmissiveWindow from "../EmissiveWindow"
 import params from "../../assets/params.json"
 import { useResource } from "react-three-fiber"

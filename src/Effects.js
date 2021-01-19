@@ -1,11 +1,10 @@
-import { BlurPass, Resizer, KernelSize, BlendFunction } from "postprocessing"
-import { React, Suspense, useLayoutEffect } from "react"
-import { EffectComposer, GodRays, Sepia, Bloom, Noise, DepthOfField, SMAA, Outline } from "react-postprocessing"
-import { useResource } from "react-three-fiber"
+import { React } from "react"
+import { EffectComposer, Bloom, DepthOfField, SMAA } from "react-postprocessing"
+// import { useResource } from "react-three-fiber"
 import useStore from "./store"
 
 const Effects = () => {
-  const sunRef = useResource()
+  // const sunRef = useResource()
   const outlineTargets = useStore((state) => state.outlineTargets)
 
   console.log(outlineTargets)

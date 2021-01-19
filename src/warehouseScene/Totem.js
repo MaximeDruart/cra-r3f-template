@@ -1,13 +1,11 @@
-import React, { useRef, useMemo, useState, useLayoutEffect, useCallback, useEffect } from "react"
+import React, { useRef, useState, useLayoutEffect, useCallback } from "react"
 import { useFrame } from "react-three-fiber"
 import * as THREE from "three"
 import params from "../assets/params.json"
 import SimplexNoise from "simplex-noise"
 import seedrandom from "seedrandom"
 import { mapRange } from "../utils/functions"
-import { PointLightWrapper } from "../utils/lightWrappers"
 import useStore from "../store"
-import { Html } from "drei"
 import groundCrackPath from "../assets/texture/groundCrackInverted.png"
 import { useTexture } from "@react-three/drei"
 import lerp from "lerp"
@@ -44,7 +42,7 @@ const Totem = (props) => {
   )
   useLayoutEffect(() => {
     props.index === 0 && instancedRef.current && setOutlineTargets(instancedRef)
-  }, [instancedRef, setOutlineTargets])
+  }, [instancedRef, props.index, setOutlineTargets])
 
   useLayoutEffect(() => {
     const { vertices } = circleRef.current.geometry

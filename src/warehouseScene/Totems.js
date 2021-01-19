@@ -3,7 +3,6 @@ import artists from "../assets/artists.json"
 import params from "../assets/params.json"
 import Totem from "./Totem"
 import { mapRange } from "../utils/functions"
-import { Box } from "@react-three/drei"
 
 const Totems = (props) => {
   const mappedArtistTotems = useMemo(

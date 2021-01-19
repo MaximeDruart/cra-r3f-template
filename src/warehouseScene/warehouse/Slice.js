@@ -1,12 +1,11 @@
-import React, { useRef } from "react"
+import React from "react"
 import * as THREE from "three"
 import { useGLTF } from "@react-three/drei/useGLTF"
 
-import { PointLightWrapper } from "../../utils/lightWrappers"
 import EmissiveWindow from "../EmissiveWindow"
 import params from "../../assets/params.json"
 import { Box } from "@react-three/drei"
-import { useFrame, useResource } from "react-three-fiber"
+import { useResource } from "react-three-fiber"
 
 const WarehouseSlice = (props) => {
   const spotLightRefRight = useResource()

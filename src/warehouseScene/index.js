@@ -1,18 +1,12 @@
-import React, { Suspense, useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, OrbitControls } from "@react-three/drei"
-import * as THREE from "three"
 import useStore from "../store"
 import Warehouse from "./warehouse"
 import Totems from "./Totems"
 import Props from "./Props"
-import { useFrame, useResource, useThree } from "react-three-fiber"
-import lerp from "lerp"
+import { useResource } from "react-three-fiber"
 import gsap from "gsap"
 // import mapRange from '../utils/functions'
-
-import useEventListener from "../utils/useEventListener"
-
-const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3)
 
 const WarehouseScene = () => {
   const cameraTarget = useStore((state) => state.cameraTarget)
@@ -20,8 +14,6 @@ const WarehouseScene = () => {
   const boxRef = useResource()
 
   const [camIsLocked, setCamIsLocked] = useState(false)
-
-  const mouse = useStore((state) => state.mouse)
 
   useEffect(() => {
     if (cameraTarget?.pos) {
