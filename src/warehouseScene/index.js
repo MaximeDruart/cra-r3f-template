@@ -75,16 +75,17 @@ const WarehouseScene = () => {
       <OrbitControls
         enablePan={false}
         enableKeys={true}
-        maxAzimuthAngle={Math.PI / 2.2}
-        minAzimuthAngle={-Math.PI / 2.2}
+        maxAzimuthAngle={Math.PI / 2.4}
+        minAzimuthAngle={-Math.PI / 2.4}
         minDistance={3.5}
         maxDistance={7}
         minPolarAngle={-Math.PI / 2}
-        maxPolarAngle={Math.PI / 2}
+        maxPolarAngle={Math.PI / 1.75}
         ref={orbitRef}
         position={[0, -100, -11]}
       />
-      <Box wireframe={true} ref={boxRef} />
+      <Box visible={false} ref={boxRef} />
+
       <Warehouse position={[0, 0, 0]} />
       <Props rotation={[0, Math.PI / 2, 0]} position={[0, -2.5, 0]} />
       <Totems />

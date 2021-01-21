@@ -13,64 +13,98 @@ import lerp from "lerp"
 const noise = new SimplexNoise()
 
 const count = 10
+// let animValue.current = 0
+
+let a = new THREE.Vector3(1, 0, 0)
+let b = new THREE.Vector3(1, 0, 0)
+console.log(a === b, a == b)
 
 const dummyObject = new THREE.Object3D()
+
+const easeOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2)
+
+const easeIn = (x) => x * x * x * x
 
 const r = (f = false, c = 1) => (!f ? Math.random() * c - c / 2 : Math.floor(Math.random() * c - c / 2))
 
 const Totem = (props) => {
   const [positions, setPositions] = useState(
     new Array(count).fill().map(() => ({
-      totemPos: [r(false, 3.5), r(false, 5), r(false, 3.5)],
+      totemPos: new THREE.Vector3(r(false, 1.75), r(false, 2.5), r(false, 1.75)),
       circlePos: "",
       baseNumber: seedrandom(props.artist)(),
     }))
   )
 
-  const groundCrackMap = useTexture(groundCrackPath)
-  groundCrackMap.repeat.set(0.3, 0.3)
-  groundCrackMap.wrapS = THREE.RepeatWrapping
-  groundCrackMap.wrapT = THREE.RepeatWrapping
+  let animValue = useRef(0)
+  let pickedVerticesHistory = useRef([])
+
+  const [hovered, setHovered] = useState({
+    dir: "down",
+    playing: false,
+  })
 
   const instancedRef = useRef()
   const circleRef = useRef()
 
   const lightRef = useRef()
+  const centerLightRef = useRef()
 
-  const [setOutlineTargets, setCameraTarget, cameraTarget] = useStore(
-    useCallback((state) => [state.setOutlineTargets, state.setCameraTarget, state.cameraTarget], [])
+  const [setCameraTarget, cameraTarget] = useStore(
+    useCallback((state) => [state.setCameraTarget, state.cameraTarget], [])
   )
-  useLayoutEffect(() => {
-    props.index === 0 && instancedRef.current && setOutlineTargets(instancedRef)
-  }, [instancedRef, props.index, setOutlineTargets])
+
+  const getNearestCircleVertex = (vertices, pos) => {
+    let minDistance = Infinity
+    let vertex
+    for (const _vertex of vertices) {
+      const distance = _vertex.distanceTo(pos)
+      if (distance < minDistance && !pickedVerticesHistory.current.includes(_vertex)) {
+        minDistance = distance
+        vertex = _vertex
+      }
+    }
+    return vertex
+  }
 
   useLayoutEffect(() => {
     const { vertices } = circleRef.current.geometry
+
     setPositions((positions) =>
       positions.map((pos) => ({
         ...pos,
-        circlePos: vertices[Math.floor(Math.random() * vertices.length)],
+        circlePos: getNearestCircleVertex(vertices, pos.totemPos),
       }))
     )
   }, [])
 
   useFrame(({ clock }) => {
+    const t = clock.getElapsedTime()
+    // console.log(hovered)
+    // console.log(animValue)
+
+    if (hovered.playing) {
+      animValue.current += hovered.dir === "up" ? 0.01 : -0.01
+      animValue.current = Math.min(Math.max(animValue.current, 0), 1)
+      if (animValue.current <= 0) hovered.playing = false
+    }
+    centerLightRef.current.power = animValue.current * 40 * 4 * Math.PI
     positions.forEach((pos, index) => {
       const { totemPos, circlePos, baseNumber } = pos
       const position = new THREE.Vector3(0, 0, 0)
-      const [x, y, z] = totemPos
-      const actualPos = position.lerpVectors(new THREE.Vector3(x, y, z), circlePos, 0)
-      actualPos.y += mapRange(
-        noise.noise2D(seedrandom(index.toString())() * 10, baseNumber + clock.getElapsedTime() / 10),
-        -1,
-        1,
-        -1,
-        1
-      )
+      const { x, y, z } = totemPos
+      const actualPos = position.lerpVectors(new THREE.Vector3(x, y, z), circlePos, easeOut(animValue.current))
+      actualPos.y += noise.noise2D(seedrandom(index.toString())() * 5, baseNumber + t / 20)
+
       dummyObject.position.set(actualPos.x, actualPos.y, actualPos.z)
       dummyObject.updateMatrix()
       instancedRef.current.setMatrixAt(index, dummyObject.matrix)
     })
+
+    if (hovered.playing) instancedRef.current.rotation.y += mapRange(animValue.current, 0, 1, 0.001, 0.01)
+    // const closestFullRotation = Math.floor(instancedRef.current.rotation.y % (Math.PI * 2)) * (Math.PI * 2)
+    // if (hovered.dir === "down") instancedRef.current.rotation.y = lerp(instancedRef.current.rotation.y, 0, 0.01)
+
     instancedRef.current.instanceMatrix.needsUpdate = true
 
     // light update
@@ -99,20 +133,29 @@ const Totem = (props) => {
         target={instancedRef.current}
         color={0xffffff}
         position={[0, 2, 4]}
-      ></spotLight>
-      <mesh visible={false} ref={circleRef}>
-        <sphereGeometry attach='geometry' args={[2, 32, 32]} />
-        <meshStandardMaterial wireframe={true} attach='material' color='blue' />
+      />
+      <pointLight distance={20} decay={2} ref={centerLightRef} />
+      <mesh
+        onPointerOver={() =>
+          cameraTarget && cameraTarget?.id === instancedRef?.current?.uuid && setHovered({ playing: true, dir: "up" })
+        }
+        onPointerOut={() =>
+          cameraTarget && cameraTarget?.id === instancedRef?.current?.uuid && setHovered({ playing: true, dir: "down" })
+        }
+        visible={false}
+        ref={circleRef}
+      >
+        <sphereGeometry attach='geometry' args={[1.75, 10, 10]} />
+        <meshBasicMaterial wireframe={true} attach='material' color='blue' />
       </mesh>
       <instancedMesh
-        onClick={clickHandler}
-        scale={[0.56, 0.56, 0.56]}
         castShadow={false}
         receiveShadow={true}
         ref={instancedRef}
         args={[null, null, count]}
+        onClick={clickHandler}
       >
-        <boxBufferGeometry attach='geometry' args={[1, 2, 1]}></boxBufferGeometry>
+        <boxBufferGeometry attach='geometry' args={[0.5, 1, 0.5]}></boxBufferGeometry>
         <meshLambertMaterial
           side={THREE.DoubleSide}
           color={params.sceneColor}

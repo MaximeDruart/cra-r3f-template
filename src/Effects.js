@@ -1,5 +1,5 @@
 import { React } from "react"
-import { EffectComposer, Bloom, DepthOfField, SMAA } from "react-postprocessing"
+import { EffectComposer, Bloom, DepthOfField, SMAA, Noise } from "react-postprocessing"
 // import { useResource } from "react-three-fiber"
 import useStore from "./store"
 
@@ -55,7 +55,7 @@ const Effects = () => {
         )} */}
 
         <SMAA />
-        {/* <Noise opacity={0.02} /> */}
+        <Noise opacity={0.02} />
         <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} opacity={0.09} />
         <DepthOfField focusDistance={0} focalLength={0.04} bokehScale={1.6} height={360} />
       </EffectComposer>

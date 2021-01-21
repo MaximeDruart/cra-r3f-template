@@ -10,6 +10,7 @@ import Effects from "./Effects"
 import gsap from "gsap"
 import ThreePlugin from "./utils/GSAPTHREE"
 import useStore from "./store"
+import { Box } from "@react-three/drei"
 
 gsap.registerPlugin(ThreePlugin)
 
@@ -34,17 +35,16 @@ const CanvasContainer = () => {
         shadowMap
         colorManagement={true}
         style={{ background: params.sceneColor }}
-        onPointerMove={updateMouse}
+        // onPointerMove={updateMouse}
       >
         <ambientLight intensity={1} />
-        {/* <gridHelper /> */}
-        {/* <axesHelper scale={[5, 5, 5]} /> */}
         <Suspense fallback={null}>
           <WarehouseScene />
           <Effects />
         </Suspense>
-
         <Stats />
+        {/* <gridHelper /> */}
+        {/* <axesHelper scale={[5, 5, 5]} /> */}
       </Canvas>
     </StyledContainer>
   )
