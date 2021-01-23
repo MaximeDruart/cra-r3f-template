@@ -1,6 +1,7 @@
 import { React } from "react"
-import { EffectComposer, Bloom, DepthOfField, SMAA, Noise } from "react-postprocessing"
+import { EffectComposer, Bloom, DepthOfField, SMAA, Noise, Vignette } from "react-postprocessing"
 // import { useResource } from "react-three-fiber"
+import { BlendFunction, BlurPass, Resizer, KernelSize } from "postprocessing"
 import useStore from "./store"
 
 const Effects = () => {
@@ -14,7 +15,7 @@ const Effects = () => {
         <dodecahedronGeometry attach='geometry' />
         <meshStandardMaterial visible={false} emissive='white' attach='material' color={"blue"} />
       </mesh> */}
-      <EffectComposer multisampling={0}>
+      <EffectComposer multisampling={8}>
         {/* <Sepia
                 intensity={1.0} // sepia intensity
                 //   blendFunction={BlendFunction.NORMAL} // blend mode
@@ -54,10 +55,16 @@ const Effects = () => {
           />
         )} */}
 
-        <SMAA />
-        <Noise opacity={0.02} />
+        {/* <SMAA /> */}
+        <Noise opacity={0.03} />
         <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} opacity={0.09} />
-        <DepthOfField focusDistance={0} focalLength={0.04} bokehScale={1.6} height={360} />
+        <DepthOfField focusDistance={0} focalLength={0.04} bokehScale={1.8} height={360} />
+        <Vignette
+          offset={0.5} // vignette offset
+          darkness={0.5} // vignette darkness
+          eskil={false} // Eskil's vignette technique
+          blendFunction={BlendFunction.NORMAL} // blend mode
+        />
       </EffectComposer>
     </>
   )

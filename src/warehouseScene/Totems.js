@@ -21,7 +21,12 @@ const Totems = (props) => {
       )),
     []
   )
-  return <group {...props}>{mappedArtistTotems}</group>
+  return (
+    <group {...props}>
+      {/* <Totem /> */}
+      {mappedArtistTotems}
+    </group>
+  )
 }
 
 export default Totems

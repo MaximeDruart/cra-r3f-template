@@ -84,7 +84,7 @@ const WarehouseScene = () => {
         ref={orbitRef}
         position={[0, -100, -11]}
       />
-      <Box visible={false} ref={boxRef} />
+      <Box scale={[0, 0, 0]} visible={true} ref={boxRef} />
 
       <Warehouse position={[0, 0, 0]} />
       <Props rotation={[0, Math.PI / 2, 0]} position={[0, -2.5, 0]} />

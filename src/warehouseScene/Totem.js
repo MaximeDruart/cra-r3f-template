@@ -7,27 +7,38 @@ import seedrandom from "seedrandom"
 import { mapRange } from "../utils/functions"
 import useStore from "../store"
 import groundCrackPath from "../assets/texture/groundCrackInverted.png"
-import { useTexture } from "@react-three/drei"
+import { useCubeTexture, useTexture } from "@react-three/drei"
 import lerp from "lerp"
+import mapPath from "../assets/texture/groundCrack.png"
+import invertedMapPath from "../assets/texture/groundCrackInverted.png"
+import normalMapPath from "../assets/texture/groundCrackNormal.png"
+import { Box } from "drei"
 
 const noise = new SimplexNoise()
 
 const count = 10
-// let animValue.current = 0
-
-let a = new THREE.Vector3(1, 0, 0)
-let b = new THREE.Vector3(1, 0, 0)
-console.log(a === b, a == b)
 
 const dummyObject = new THREE.Object3D()
 
 const easeOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2)
-
 const easeIn = (x) => x * x * x * x
-
 const r = (f = false, c = 1) => (!f ? Math.random() * c - c / 2 : Math.floor(Math.random() * c - c / 2))
 
 const Totem = (props) => {
+  const [mapTest, invertedMap, normalMap] = useTexture([mapPath, invertedMapPath, normalMapPath])
+  mapTest.wrapS = THREE.RepeatWrapping
+  mapTest.wrapT = THREE.RepeatWrapping
+  mapTest.repeat.y = 0.6
+  mapTest.repeat.x = 0.3
+  normalMap.wrapS = THREE.RepeatWrapping
+  normalMap.wrapT = THREE.RepeatWrapping
+  normalMap.repeat.y = 0.6
+  normalMap.repeat.x = 0.3
+  invertedMap.wrapS = THREE.RepeatWrapping
+  invertedMap.wrapT = THREE.RepeatWrapping
+  invertedMap.repeat.y = 0.6
+  invertedMap.repeat.x = 0.3
+
   const [positions, setPositions] = useState(
     new Array(count).fill().map(() => ({
       totemPos: new THREE.Vector3(r(false, 1.75), r(false, 2.5), r(false, 1.75)),
@@ -47,7 +58,7 @@ const Totem = (props) => {
   const instancedRef = useRef()
   const circleRef = useRef()
 
-  const lightRef = useRef()
+  const spotLightRef = useRef()
   const centerLightRef = useRef()
 
   const [setCameraTarget, cameraTarget] = useStore(
@@ -88,7 +99,7 @@ const Totem = (props) => {
       animValue.current = Math.min(Math.max(animValue.current, 0), 1)
       if (animValue.current <= 0) hovered.playing = false
     }
-    centerLightRef.current.power = animValue.current * 40 * 4 * Math.PI
+    centerLightRef.current.power = easeOut(animValue.current) * 30 * 4 * Math.PI
     positions.forEach((pos, index) => {
       const { totemPos, circlePos, baseNumber } = pos
       const position = new THREE.Vector3(0, 0, 0)
@@ -108,9 +119,9 @@ const Totem = (props) => {
     instancedRef.current.instanceMatrix.needsUpdate = true
 
     // light update
-    lightRef.current.power = lerp(
-      lightRef.current.power,
-      cameraTarget?.id === instancedRef?.current?.uuid ? (cameraTarget ? 3 * 4 * Math.PI : 0) : 0,
+    spotLightRef.current.power = lerp(
+      spotLightRef.current.power,
+      cameraTarget?.id === instancedRef?.current?.uuid ? (cameraTarget ? 10 * 4 * Math.PI : 0) : 0,
       0.1
     )
   })
@@ -124,7 +135,7 @@ const Totem = (props) => {
   return (
     <group {...props}>
       <spotLight
-        ref={lightRef}
+        ref={spotLightRef}
         // castShadow
         visible={cameraTarget?.id === instancedRef?.current?.uuid}
         distance={40}
@@ -134,7 +145,8 @@ const Totem = (props) => {
         color={0xffffff}
         position={[0, 2, 4]}
       />
-      <pointLight distance={20} decay={2} ref={centerLightRef} />
+      <pointLight distance={40} decay={2} ref={centerLightRef} />
+
       <mesh
         onPointerOver={() =>
           cameraTarget && cameraTarget?.id === instancedRef?.current?.uuid && setHovered({ playing: true, dir: "up" })
@@ -145,7 +157,7 @@ const Totem = (props) => {
         visible={false}
         ref={circleRef}
       >
-        <sphereGeometry attach='geometry' args={[1.75, 10, 10]} />
+        <sphereGeometry attach='geometry' args={[1.75, 15, 15]} />
         <meshBasicMaterial wireframe={true} attach='material' color='blue' />
       </mesh>
       <instancedMesh
@@ -155,13 +167,27 @@ const Totem = (props) => {
         args={[null, null, count]}
         onClick={clickHandler}
       >
-        <boxBufferGeometry attach='geometry' args={[0.5, 1, 0.5]}></boxBufferGeometry>
-        <meshLambertMaterial
+        <boxBufferGeometry attach='geometry' args={[0.5, 1, 0.5]} />
+        <meshStandardMaterial
+          attach='material'
+          color={"rgb(100,100,100)"}
+          emissive={"rgb(40,40,40)"}
+          // emissive='white'
+          emissiveMap={invertedMap}
+          emissiveIntensity={hovered.dir === "up" ? 15 : 0}
+          roughness={0.8}
+          metalness={0}
+          roughnessMap={mapTest}
+          normalMap={normalMap}
+          normalScale={new THREE.Vector2(15, 15)}
+        />
+
+        {/* <meshLambertMaterial
           side={THREE.DoubleSide}
           color={params.sceneColor}
           emissive={"rgb(40,40,40)"}
           attach='material'
-        />
+        /> */}
         {/* <meshStandardMaterial color={params.sceneColor} attach='material' /> */}
         {/* <Html scaleFactor={10}>Text</Html> */}
       </instancedMesh>
