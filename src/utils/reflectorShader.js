@@ -22,11 +22,14 @@ const shader = {
 			uniform mat4 World;
 
 			out vec4 FragPos;
+			varying vec2 tex_coord;
 
 			void main() {
 				vUv = textureMatrix * vec4( position, 1.0 );
 				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 				FragPos = modelMatrix * vec4(position, 1.0);
+
+				tex_coord = gl_MultiTexCoord7.st;
 			}
 	`,
 
@@ -37,7 +40,9 @@ const shader = {
 			uniform float iTime;
 			uniform vec2 u_resolution;
 			varying vec4 vUv;
+
 			in vec4 FragPos;
+			varying vec2 tex_coord;
 
             float blendOverlay( float base, float blend ) {
 
@@ -108,7 +113,8 @@ const shader = {
 			// vec3 Color = vec3(noiseValue, noiseValue, noiseValue);
 			
 			// Tex calculation
-			vec4 wetTexColor = texture(wetMap, vec2(FragPos.x / 15.0, FragPos.z / 15.0));
+			// vec4 wetTexColor = texture(wetMap, vec2(FragPos.x / 20.0, FragPos.z / 20.0));
+			vec4 wetTexColor = texture(wetMap, tex_coord);
 			vec2 texRad = vec2(wetTexColor.x, wetTexColor.x);
 
             // Pixel colour
@@ -126,10 +132,10 @@ const shader = {
 			}
 			
 			// Darkening color depending on the noise
-			vec4 mixColor = vec4(21.0, 21.0, 21.0, 0.0);
+			vec4 mixColor = vec4(19.0, 21.0, 21.0, 0.0);
 			// float percent = noiseValue * 10.0;
 			float percent = wetTexColor.x * 1.0;
-			Color = mix(Color, mixColor, percent);
+			// Color = mix(Color, mixColor, percent);
 
             // Output to screen
             Color /= Quality * Directions - 15.0;

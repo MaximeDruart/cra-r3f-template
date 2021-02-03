@@ -6,8 +6,11 @@ import shader from '../utils/reflectorShader.js'
 import * as THREE from 'three'
 
 import params from '../assets/params.json'
-import wetFloorMapSource from '../assets/texture/Ground_wet_003_roughness.jpg'
+
+// import wetFloorMapSource from '../assets/texture/wetFloorMapTest3.png'
 // import wetFloorMapSource from '../assets/texture/groundwetconstrast1024.png'
+import wetFloorMapSource from '../assets/texture/testMap.jpg'
+
 import wetFloorNormalMapSource from '../assets/texture/Ground_wet_003_normal.jpg'
 import { PointLightWrapper, SpotLightWrapper } from '../utils/lightWrappers.js'
 
@@ -19,18 +22,19 @@ const WarehouseFloor = () => {
 	wetFloorNormalMap.wrapS = RepeatWrapping
 	wetFloorNormalMap.wrapT = RepeatWrapping
 
-	wetFloorMap.repeat.set(params.warehouseSliceNumber * 0.55, 1)
+	wetFloorMap.repeat.set(params.warehouseSliceNumber + 1, 1)
+	// wetFloorNormalMap.offset.set(55, 0.5)
 	wetFloorNormalMap.repeat.set(params.warehouseSliceNumber * 0.55, 1)
 
 	const reflectorRef = useResource()
 
 	useEffect(() => {
 		reflectorRef.current.material.uniforms.wetMap = { type: 'f', value: wetFloorMap }
-		// console.log(reflectorRef.current.material.uniforms)
+		console.log(reflectorRef.current.material.uniforms)
 	})
 
 	useFrame(() => {
-		reflectorRef.current.material.uniforms.iTime = Date.now()
+		// reflectorRef.current.material.uniforms.iTime = Date.now()
 	})
 	return (
 		<>
@@ -42,21 +46,21 @@ const WarehouseFloor = () => {
 				clipBias={0.003}
 				textureWidth={window.innerWidth * window.devicePixelRatio}
 				textureHeight={window.innerHeight * window.devicePixelRatio}
-				color={'#161616'}
+				color={'#606060'}
 				// color={'white'}
 			>
 				<planeBufferGeometry args={[params.warehouseLength * (params.warehouseSliceNumber + 1), 25]} attach="geometry" />
 			</Reflector>
-			{/* <mesh
+			<mesh
 				receiveShadow
-				position={[((params.warehouseSliceNumber + 1) / 2) * 11.2 - 11.2 / 2, -3.99, 0]}
+				position={[((params.warehouseSliceNumber + 1) / 2) * 11.2 - 11.2 / 2, 0, 0]}
 				// position={[0, -2, 0]}
 				rotation={[-Math.PI / 2, 0, 0]}
 				scale={[1, 1, 1]}
 			>
 				<planeBufferGeometry args={[params.warehouseLength * (params.warehouseSliceNumber + 1), 25]} attach="geometry" />
-				<meshPhongMaterial shininess={0} transparent alphaMap={wetFloorMap} normalMap={wetFloorNormalMap} normalScale={new THREE.Vector2(3, 3)} color="black" emissive={params.sceneColor} emissiveIntensity={2} attach="material" />
-			</mesh> */}
+				<meshStandardMaterial transparent alphaMap={wetFloorMap} color={params.sceneColor} attach="material" repe />
+			</mesh>
 		</>
 	)
 }
