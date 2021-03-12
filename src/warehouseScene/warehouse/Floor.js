@@ -1,3 +1,4 @@
+import React from "react"
 import { TextureLoader, RepeatWrapping } from "three"
 import { useFrame, useLoader, useResource } from "react-three-fiber"
 import { Reflector } from "@react-three/drei"
@@ -41,7 +42,7 @@ const WarehouseFloor = () => {
           attach='geometry'
         />
       </Reflector>
-      {/* <mesh
+      <mesh
         receiveShadow
         position={[0, -4.09, -(params.warehouseSliceNumber / 2) * 11.2]}
         // position={[0, -2, 0]}
@@ -61,7 +62,7 @@ const WarehouseFloor = () => {
           emissive={"0x151515"}
           attach='material'
         />
-      </mesh> */}
+      </mesh>
     </>
   )
 }

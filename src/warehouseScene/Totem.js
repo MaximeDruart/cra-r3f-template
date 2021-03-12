@@ -148,12 +148,18 @@ const Totem = (props) => {
       <pointLight distance={40} decay={2} ref={centerLightRef} />
 
       <mesh
-        onPointerOver={() =>
-          cameraTarget && cameraTarget?.id === instancedRef?.current?.uuid && setHovered({ playing: true, dir: "up" })
-        }
-        onPointerOut={() =>
-          cameraTarget && cameraTarget?.id === instancedRef?.current?.uuid && setHovered({ playing: true, dir: "down" })
-        }
+        onPointerOver={() => {
+          if (cameraTarget && cameraTarget?.id === instancedRef?.current?.uuid) {
+            setHovered({ playing: true, dir: "up" })
+            document.body.style.cursor = "pointer"
+          }
+        }}
+        onPointerOut={() => {
+          if (cameraTarget && cameraTarget?.id === instancedRef?.current?.uuid) {
+            setHovered({ playing: true, dir: "down" })
+            document.body.style.cursor = "auto"
+          }
+        }}
         visible={false}
         ref={circleRef}
       >
@@ -166,6 +172,12 @@ const Totem = (props) => {
         ref={instancedRef}
         args={[null, null, count]}
         onClick={clickHandler}
+        onPointerOver={() => {
+          document.body.style.cursor = "pointer"
+        }}
+        onPointerOut={() => {
+          document.body.style.cursor = "auto"
+        }}
       >
         <boxBufferGeometry attach='geometry' args={[0.5, 1, 0.5]} />
         <meshStandardMaterial
